@@ -1,7 +1,8 @@
 import {Express, Request, Response} from "express";
+import auth from "../cnb-2-features/f-1-auth";
 
 export const routes = (app: Express) => {
-    // app.use('/auth', auth);
+    app.use('/auth', auth);
 
     //default
     app.use((req: Request, res: Response) => {

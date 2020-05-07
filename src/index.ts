@@ -2,11 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import {MongoDBUris} from "./cnb-1-main/config";
 import {appUse} from "./cnb-1-main/app";
+import {routes} from "./cnb-1-main/routes";
 
 const app = express();
 
 appUse(app);
-// routes(app);
+routes(app);
 
 mongoose.connect(MongoDBUris, {
     useNewUrlParser: true,
