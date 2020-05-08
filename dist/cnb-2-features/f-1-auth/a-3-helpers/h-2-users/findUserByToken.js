@@ -15,9 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("../../a-2-models/user"));
 const generateResetPasswordToken_1 = require("./generateResetPasswordToken");
 const config_1 = require("../../../../cnb-1-main/config");
-exports.findUserByToken = (f, inTry) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.findUserByToken = (f, inTry, query) => (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = query ? req.query.token : req.body.token;
     try {
-        const user = yield user_1.default.findOne({ token: req.body.token }).exec();
+        const user = yield user_1.default.findOne({ token }).exec();
         if (!user || user.tokenDeathTime < new Date().getTime())
             res.status(401).json({ error: 'bad token!', in: inTry + '/findUserByToken/User.findOne' });
         else {

@@ -4,7 +4,7 @@ import {findUserByToken} from "../f-1-auth/a-3-helpers/h-2-users/findUserByToken
 
 const cards = express.Router();
 
-cards.get('/pack', findUserByToken(getCardPacks, 'getCardPacks')); // for dev
+cards.get('/pack', findUserByToken(getCardPacks, 'getCardPacks', true)); // for dev
 //
 // cards.post('/login', logIn);
 // cards.post('/register', createUser);

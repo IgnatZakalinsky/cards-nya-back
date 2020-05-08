@@ -3,10 +3,12 @@ import User, {IUser} from "../../a-2-models/user";
 import {generateToken} from "./generateResetPasswordToken";
 import {DEV_VERSION} from "../../../../cnb-1-main/config";
 
-export const findUserByToken = (f: (req: Request, res: Response, user: IUser) => void, inTry: string) =>
+export const findUserByToken = (f: (req: Request, res: Response, user: IUser) => void, inTry: string, query?: boolean) =>
     async (req: Request, res: Response) => {
+        const token = query ? req.query.token : req.body.token;
+
         try {
-            const user: IUser | null = await User.findOne({token: req.body.token}).exec();
+            const user: IUser | null = await User.findOne({token}).exec();
 
             if (!user || user.tokenDeathTime < new Date().getTime())
                 res.status(401).json({error: 'bad token!', in: inTry + '/findUserByToken/User.findOne'});
