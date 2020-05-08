@@ -52,5 +52,5 @@ const UserSchema = new mongoose_1.Schema({
         updatedAt: 'updated',
     },
 });
-exports.default = mongoose_1.default.model('nya-user', UserSchema);
+exports.default = mongoose_1.default.model('cards-nya-user', UserSchema);
 //# sourceMappingURL=user.js.map

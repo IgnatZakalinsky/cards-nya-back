@@ -48,4 +48,13 @@ exports.findUserByToken = (f, inTry) => (req, res) => __awaiter(void 0, void 0, 
         });
     }
 });
+exports.status500 = (res, e, user, inTry) => {
+    res.status(500).json({
+        error: 'some error',
+        errorObject: config_1.DEV_VERSION && e,
+        in: inTry,
+        token: user.token,
+        tokenDeathTime: user.tokenDeathTime,
+    });
+};
 //# sourceMappingURL=findUserByToken.js.map

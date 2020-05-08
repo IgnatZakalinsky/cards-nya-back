@@ -72,4 +72,4 @@ const UserSchema: Schema = new Schema(
     }
 );
 
-export default mongoose.model<IUser>('nya-user', UserSchema);
+export default mongoose.model<IUser>('cards-nya-user', UserSchema);

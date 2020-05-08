@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import User, {IUser} from "../../a-2-models/user";
 import {generateToken} from "./generateResetPasswordToken";
-import { DEV_VERSION } from "../../../../cnb-1-main/config";
+import {DEV_VERSION} from "../../../../cnb-1-main/config";
 
 export const findUserByToken = (f: (req: Request, res: Response, user: IUser) => void, inTry: string) =>
     async (req: Request, res: Response) => {
@@ -44,3 +44,13 @@ export const findUserByToken = (f: (req: Request, res: Response, user: IUser) =>
             });
         }
     };
+
+export const status500 = (res: Response, e: any, user: IUser, inTry: string) => {
+    res.status(500).json({
+        error: 'some error',
+        errorObject: DEV_VERSION && e,
+        in: inTry,
+        token: user.token,
+        tokenDeathTime: user.tokenDeathTime,
+    })
+};
