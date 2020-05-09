@@ -13,63 +13,61 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const cardsPack_1 = __importDefault(require("../c-2-models/cardsPack"));
+const findUserByToken_1 = require("../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
 exports.getCardPacks = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
-    // const {page, pageCount, sortPacks, packName, min, max} = req.query;
-    //
-    // let pageF = +page || 1;
-    // const pageCountF = +pageCount || 7;
-    // const sortPacksF: string = sortPacks as string | undefined || '';
-    // const packNameF: string = packName as string | undefined || '';
+    const { page, pageCount, sortPacks, packName, min, max } = req.query;
+    let pageF = +page || 1;
+    const pageCountF = +pageCount || 4;
+    const sortPacksF = sortPacks || ''; // '0grade'
+    const packNameF = packName || '';
     // await CardsPack.create(
-    //     {user_id: user._id, name: 'fakeCardsPack', path: '/def', grade: Math.random() * 5, type: 'pack', rating: 0}
+    //     {user_id: user._id, name: 'fake2CardsPack', path: '/def', grade: Math.random() * 5, type: 'pack', rating: 0}
     // ); // seed
-    // CardsPack.findOne().sort({grade: 1})
-    //     .exec()
-    //     .then((packMin: ICardsPack | null) => {
-    //         const minF = packMin ? packMin.grade : 0;
-    //
-    //         CardsPack.findOne().sort({grade: -1}).exec()
-    //             .then((packMax: ICardsPack | null) => {
-    // const maxF = packMax ? packMax.grade : minF;
-    // const sortName: any = sortPacksF && sortPacksF.length > 2 ? sortPacksF.slice(1) : undefined;
-    // const direction = sortName ? (sortPacksF[0] === '0' ? -1 : 1) : undefined;
-    // console.log(sortPacksF + '|' + packNameF + '|' + sortName + '|' + direction);
-    cardsPack_1.default.find({
-        name: new RegExp(req.query.name),
-    });
-    // .sort({[sortName]: direction, updated: -1})
-    // .skip(pageCountF * (pageF - 1))
-    // .limit(pageCountF)
-    // .lean()
-    // .exec()
-    // .then(cardPacks => {
-    //
-    //     CardsPack.count(
-    //         {
-    //             name: new RegExp(packNameF),
-    //             grade: {$gte: min || minF, $lte: max || maxF}
-    //         }
-    //     )
-    //         .exec()
-    //         .then(cardPacksTotalCount => {
-    //             if (pageCountF * (pageF - 1) > cardPacksTotalCount) pageF = 1;
-    //
-    //             res.status(200)
-    //                 .json({
-    //                     cardPacks,
-    //                     page: pageF, pageCount: pageCountF, cardPacksTotalCount,
-    //                     minGrade: minF, maxGrade: maxF,
-    //                     token: user.token,
-    //                     tokenDeathTime: user.tokenDeathTime,
-    //                 })
-    //         })
-    //         .catch(e => status500(res, e, user, 'getCardPacks/CardsPack.count'))
-    // })
-    // .catch(e => status500(res, e, user, 'getCardPacks/CardsPack.find'))
-    //                 })
-    //                 .catch(e => status500(res, e, user, 'getCardPacks/CardsPack.findOne/max'))
-    //         })
-    //         .catch(e => status500(res, e, user, 'getCardPacks/CardsPack.findOne/min'))
+    cardsPack_1.default.findOne().sort({ grade: 1 })
+        .exec()
+        .then((packMin) => {
+        const minF = packMin ? packMin.grade : 0;
+        cardsPack_1.default.findOne().sort({ grade: -1 }).exec()
+            .then((packMax) => {
+            const maxF = packMax ? packMax.grade : minF;
+            const sortName = sortPacksF && sortPacksF.length > 2 ? sortPacksF.slice(1) : undefined;
+            const direction = sortName ? (sortPacksF[0] === '0' ? -1 : 1) : undefined;
+            console.log(sortPacksF + '|' + packNameF + '|' + sortName + '|' + direction);
+            // ща приду :)
+            cardsPack_1.default.find({
+                name: new RegExp(packNameF),
+                grade: { $gte: +min || minF, $lte: +max || maxF }
+            })
+                .sort({ [sortName]: direction, updated: -1 })
+                .skip(pageCountF * (pageF - 1))
+                .limit(pageCountF)
+                .lean()
+                .exec()
+                .then(cardPacks => {
+                cardsPack_1.default.count({
+                    name: new RegExp(packNameF),
+                    grade: { $gte: +min || minF, $lte: +max || maxF }
+                })
+                    .exec()
+                    .then(cardPacksTotalCount => {
+                    if (pageCountF * (pageF - 1) > cardPacksTotalCount)
+                        pageF = 1;
+                    res.status(200)
+                        .json({
+                        cardPacks,
+                        page: pageF, pageCount: pageCountF, cardPacksTotalCount,
+                        minGrade: minF, maxGrade: maxF,
+                        token: user.token,
+                        tokenDeathTime: user.tokenDeathTime,
+                    });
+                })
+                    .catch(e => findUserByToken_1.status500(res, e, user, 'getCardPacks/CardsPack.count'));
+            })
+                .catch(e => findUserByToken_1.status500(res, e, user, 'getCardPacks/CardsPack.find'));
+        })
+            .catch(e => findUserByToken_1.status500(res, e, user, 'getCardPacks/CardsPack.findOne/max'));
+    })
+        .catch(e => findUserByToken_1.status500(res, e, user, 'getCardPacks/CardsPack.findOne/min'));
 });
 // Имя Описание
 // $eq Соответствует значениям, которые равны указанному значению.
