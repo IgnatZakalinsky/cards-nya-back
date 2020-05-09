@@ -3,8 +3,8 @@ import {IUser} from "../../f-1-auth/a-2-models/user";
 import CardsPack, {ICardsPack} from "../c-2-models/cardsPack";
 import {status400, status500} from "../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
 
-export const addCardsPack = async (req2: Request, res: Response, user: IUser) => {
-    const {cardsPack} = req2.body;
+export const addCardsPack = async (req: Request, res: Response, user: IUser) => {
+    const {cardsPack} = req.body;
 
     if (!cardsPack) status400(res, `No cardsPack in body!`, user, 'addCardsPack');
 
