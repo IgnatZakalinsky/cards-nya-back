@@ -56,3 +56,11 @@ export const status500 = (res: Response, e: any, user: IUser, inTry: string) => 
         tokenDeathTime: user.tokenDeathTime,
     })
 };
+export const status400 = (res: Response, e: string, user: IUser, inTry: string) => {
+    res.status(400).json({
+        error: e,
+        in: inTry,
+        token: user.token,
+        tokenDeathTime: user.tokenDeathTime,
+    })
+};

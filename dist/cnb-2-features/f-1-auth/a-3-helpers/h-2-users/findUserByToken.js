@@ -58,4 +58,12 @@ exports.status500 = (res, e, user, inTry) => {
         tokenDeathTime: user.tokenDeathTime,
     });
 };
+exports.status400 = (res, e, user, inTry) => {
+    res.status(400).json({
+        error: e,
+        in: inTry,
+        token: user.token,
+        tokenDeathTime: user.tokenDeathTime,
+    });
+};
 //# sourceMappingURL=findUserByToken.js.map

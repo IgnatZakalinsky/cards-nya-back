@@ -7,6 +7,7 @@ export interface ICard extends Document {
     question: string;
     answer: string;
     grade: number;
+    shots: number;
 
     type: string;
     rating: number;
@@ -36,12 +37,17 @@ const Card: Schema = new Schema(
             type: Number,
             required: true
         },
+        shots: {
+            type: Number,
+            required: true
+        },
 
         type: {
             type: String,
         },
         rating: {
             type: Number,
+            required: true
         },
         more_id: {
             type: Schema.Types.ObjectId,

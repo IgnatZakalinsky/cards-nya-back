@@ -25,11 +25,17 @@ const CardsPack = new mongoose_1.Schema({
         type: Number,
         required: true
     },
+    shots: {
+        type: Number,
+        required: true
+    },
     type: {
         type: String,
+        required: true
     },
     rating: {
         type: Number,
+        required: true
     },
     more_id: {
         type: mongoose_1.Schema.Types.ObjectId,

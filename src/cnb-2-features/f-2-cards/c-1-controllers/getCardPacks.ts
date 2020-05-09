@@ -11,9 +11,16 @@ export const getCardPacks = async (req: Request, res: Response, user: IUser) => 
     const sortPacksF: string = sortPacks as string | undefined || ''; // '0grade'
     const packNameF: string = packName as string | undefined || '';
 
-    // await CardsPack.create(
-    //     {user_id: user._id, name: 'fake2CardsPack', path: '/def', grade: Math.random() * 5, type: 'pack', rating: 0}
-    // ); // seed
+    // await CardsPack.create({
+    //     user_id: user._id,
+    //     name: 'fake2CardsPack',
+    //     path: '/def',
+    //     grade: Math.random() * 5,
+    //     shots: 1,
+    //
+    //     type: 'pack',
+    //     rating: 0
+    // }); // seed
 
     CardsPack.findOne().sort({grade: 1})
         .exec()
@@ -26,8 +33,7 @@ export const getCardPacks = async (req: Request, res: Response, user: IUser) => 
 
                     const sortName: any = sortPacksF && sortPacksF.length > 2 ? sortPacksF.slice(1) : undefined;
                     const direction = sortName ? (sortPacksF[0] === '0' ? -1 : 1) : undefined;
-                    console.log(sortPacksF + '|' + packNameF + '|' + sortName + '|' + direction);
-// ща приду :)
+
                     CardsPack.find(
                         {
                             name: new RegExp(packNameF as string),

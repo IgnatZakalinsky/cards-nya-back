@@ -7,6 +7,7 @@ export interface ICardsPack extends Document {
     name: string;
     path: string;
     grade: number;
+    shots: number;
 
     type: string;
     rating: number;
@@ -36,12 +37,18 @@ const CardsPack: Schema = new Schema(
             type: Number,
             required: true
         },
+        shots: {
+            type: Number,
+            required: true
+        },
 
         type: {
             type: String,
+            required: true
         },
         rating: {
             type: Number,
+            required: true
         },
         more_id: {
             type: Schema.Types.ObjectId,

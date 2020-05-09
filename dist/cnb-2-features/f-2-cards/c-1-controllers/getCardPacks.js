@@ -20,9 +20,16 @@ exports.getCardPacks = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
     const pageCountF = +pageCount || 4;
     const sortPacksF = sortPacks || ''; // '0grade'
     const packNameF = packName || '';
-    // await CardsPack.create(
-    //     {user_id: user._id, name: 'fake2CardsPack', path: '/def', grade: Math.random() * 5, type: 'pack', rating: 0}
-    // ); // seed
+    // await CardsPack.create({
+    //     user_id: user._id,
+    //     name: 'fake2CardsPack',
+    //     path: '/def',
+    //     grade: Math.random() * 5,
+    //     shots: 1,
+    //
+    //     type: 'pack',
+    //     rating: 0
+    // }); // seed
     cardsPack_1.default.findOne().sort({ grade: 1 })
         .exec()
         .then((packMin) => {
@@ -32,8 +39,6 @@ exports.getCardPacks = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
             const maxF = packMax ? packMax.grade : minF;
             const sortName = sortPacksF && sortPacksF.length > 2 ? sortPacksF.slice(1) : undefined;
             const direction = sortName ? (sortPacksF[0] === '0' ? -1 : 1) : undefined;
-            console.log(sortPacksF + '|' + packNameF + '|' + sortName + '|' + direction);
-            // ща приду :)
             cardsPack_1.default.find({
                 name: new RegExp(packNameF),
                 grade: { $gte: +min || minF, $lte: +max || maxF }
