@@ -21,15 +21,15 @@ export interface ICard extends Document {
 
 const Card: Schema = new Schema(
     {
-        user_id: {
+        cardsPack_id: {
             type: Schema.Types.ObjectId,
             required: true
         },
-        name: {
+        question: {
             type: String,
             required: true
         },
-        path: {
+        answer: {
             type: String,
             required: true
         },
@@ -62,4 +62,4 @@ const Card: Schema = new Schema(
     }
 );
 
-export default mongoose.model<ICard>('cards-nya-pack', Card);
+export default mongoose.model<ICard>('cards-nya', Card);

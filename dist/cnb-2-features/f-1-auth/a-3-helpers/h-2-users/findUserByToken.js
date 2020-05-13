@@ -51,8 +51,8 @@ exports.findUserByToken = (f, inTry, query) => (req, res) => __awaiter(void 0, v
 });
 exports.status500 = (res, e, user, inTry) => {
     res.status(500).json({
-        error: 'some error',
-        errorObject: config_1.DEV_VERSION && e,
+        error: 'some error: ' + e.message,
+        errorObject: config_1.DEV_VERSION && Object.assign({}, e),
         in: inTry,
         token: user.token,
         tokenDeathTime: user.tokenDeathTime,

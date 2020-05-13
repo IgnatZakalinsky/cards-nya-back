@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import {IUser} from "../../f-1-auth/a-2-models/user";
-import CardsPack, {ICardsPack} from "../c-2-models/cardsPack";
-import {status400, status500} from "../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
+import {IUser} from "../../../f-1-auth/a-2-models/user";
+import CardsPack, {ICardsPack} from "../../c-2-models/cardsPack";
+import {status400, status500} from "../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
 
 export const addCardsPack = async (req: Request, res: Response, user: IUser) => {
     const {cardsPack} = req.body;
@@ -34,6 +34,6 @@ export const addCardsPack = async (req: Request, res: Response, user: IUser) => 
                 tokenDeathTime: user.tokenDeathTime
             }))
 
-            .catch(e => status500(res, e, user, 'shopPost/Product.create'));
+            .catch(e => status500(res, e, user, 'addCardsPack/CardsPack.create'));
     }
 };

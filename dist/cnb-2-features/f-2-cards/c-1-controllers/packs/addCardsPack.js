@@ -12,8 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const cardsPack_1 = __importDefault(require("../c-2-models/cardsPack"));
-const findUserByToken_1 = require("../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
+const cardsPack_1 = __importDefault(require("../../c-2-models/cardsPack"));
+const findUserByToken_1 = require("../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
 exports.addCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
     const { cardsPack } = req.body;
     if (!cardsPack)
@@ -42,7 +42,7 @@ exports.addCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
                 token: user.token,
                 tokenDeathTime: user.tokenDeathTime
             }))
-                .catch(e => findUserByToken_1.status500(res, e, user, 'shopPost/Product.create'));
+                .catch(e => findUserByToken_1.status500(res, e, user, 'addCardsPack/CardsPack.create'));
     }
 });
 //# sourceMappingURL=addCardsPack.js.map

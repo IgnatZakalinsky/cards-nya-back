@@ -49,8 +49,8 @@ export const findUserByToken = (f: (req: Request, res: Response, user: IUser) =>
 
 export const status500 = (res: Response, e: any, user: IUser, inTry: string) => {
     res.status(500).json({
-        error: 'some error',
-        errorObject: DEV_VERSION && e,
+        error: 'some error: ' + e.message,
+        errorObject: DEV_VERSION && {...e},
         in: inTry,
         token: user.token,
         tokenDeathTime: user.tokenDeathTime,

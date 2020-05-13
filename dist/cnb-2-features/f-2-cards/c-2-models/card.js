@@ -9,15 +9,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const Card = new mongoose_1.Schema({
-    user_id: {
+    cardsPack_id: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true
     },
-    name: {
+    question: {
         type: String,
         required: true
     },
-    path: {
+    answer: {
         type: String,
         required: true
     },
@@ -45,5 +45,5 @@ const Card = new mongoose_1.Schema({
         updatedAt: 'updated',
     },
 });
-exports.default = mongoose_1.default.model('cards-nya-pack', Card);
+exports.default = mongoose_1.default.model('cards-nya', Card);
 //# sourceMappingURL=card.js.map

@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import {IUser} from "../../f-1-auth/a-2-models/user";
-import CardsPack, {ICardsPack} from "../c-2-models/cardsPack";
-import {status500} from "../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
+import {IUser} from "../../../f-1-auth/a-2-models/user";
+import CardsPack, {ICardsPack} from "../../c-2-models/cardsPack";
+import {status500} from "../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
 
 export const getCardPacks = async (req: Request, res: Response, user: IUser) => {
     const {page, pageCount, sortPacks, packName, min, max} = req.query;
