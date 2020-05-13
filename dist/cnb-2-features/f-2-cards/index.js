@@ -17,6 +17,6 @@ cards.post('/pack', findUserByToken_1.findUserByToken(addCardsPack_1.addCardsPac
 cards.put('/pack', findUserByToken_1.findUserByToken(updateCardsPack_1.updateCardsPack, 'updateCardsPack'));
 cards.delete('/pack', findUserByToken_1.findUserByToken(deleteCardsPack_1.deleteCardsPack, 'deleteCardsPack', true));
 cards.get('/card', findUserByToken_1.findUserByToken(getCards_1.getCards, 'getCards', true));
-cards.post('/card', findUserByToken_1.findUserByToken(addCard_1.addCard, 'addCard', true));
+cards.post('/card', findUserByToken_1.findUserByToken(addCard_1.addCard, 'addCard'));
 exports.default = cards;
 //# sourceMappingURL=index.js.map

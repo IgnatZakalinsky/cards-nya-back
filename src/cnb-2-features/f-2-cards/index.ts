@@ -15,6 +15,6 @@ cards.put('/pack', findUserByToken(updateCardsPack, 'updateCardsPack'));
 cards.delete('/pack', findUserByToken(deleteCardsPack, 'deleteCardsPack', true));
 
 cards.get('/card', findUserByToken(getCards, 'getCards', true));
-cards.post('/card', findUserByToken(addCard, 'addCard', true));
+cards.post('/card', findUserByToken(addCard, 'addCard'));
 
 export default cards;
