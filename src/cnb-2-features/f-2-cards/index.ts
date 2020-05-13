@@ -6,6 +6,8 @@ import {deleteCardsPack} from "./c-1-controllers/packs/deleteCardsPack";
 import {updateCardsPack} from "./c-1-controllers/packs/updateCardsPack";
 import {getCards} from "./c-1-controllers/cards/getCards";
 import {addCard} from "./c-1-controllers/cards/addCard";
+import {deleteCard} from "./c-1-controllers/cards/deleteCard";
+import {updateCard} from "./c-1-controllers/cards/updateCard";
 
 const cards = express.Router();
 
@@ -16,5 +18,7 @@ cards.delete('/pack', findUserByToken(deleteCardsPack, 'deleteCardsPack', true))
 
 cards.get('/card', findUserByToken(getCards, 'getCards', true));
 cards.post('/card', findUserByToken(addCard, 'addCard'));
+cards.put('/card', findUserByToken(updateCard, 'updateCard'));
+cards.delete('/card', findUserByToken(deleteCard, 'deleteCard', true));
 
 export default cards;

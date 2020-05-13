@@ -21,4 +21,4 @@ export const deleteCardsPack = async (req: Request, res: Response, user: IUser) 
             })
         })
         .catch(e => status500(res, e, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'));
-}
+};

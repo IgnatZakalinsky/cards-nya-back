@@ -11,6 +11,8 @@ const deleteCardsPack_1 = require("./c-1-controllers/packs/deleteCardsPack");
 const updateCardsPack_1 = require("./c-1-controllers/packs/updateCardsPack");
 const getCards_1 = require("./c-1-controllers/cards/getCards");
 const addCard_1 = require("./c-1-controllers/cards/addCard");
+const deleteCard_1 = require("./c-1-controllers/cards/deleteCard");
+const updateCard_1 = require("./c-1-controllers/cards/updateCard");
 const cards = express_1.default.Router();
 cards.get('/pack', findUserByToken_1.findUserByToken(getCardPacks_1.getCardPacks, 'getCardPacks', true));
 cards.post('/pack', findUserByToken_1.findUserByToken(addCardsPack_1.addCardsPack, 'addCardsPack'));
@@ -18,5 +20,7 @@ cards.put('/pack', findUserByToken_1.findUserByToken(updateCardsPack_1.updateCar
 cards.delete('/pack', findUserByToken_1.findUserByToken(deleteCardsPack_1.deleteCardsPack, 'deleteCardsPack', true));
 cards.get('/card', findUserByToken_1.findUserByToken(getCards_1.getCards, 'getCards', true));
 cards.post('/card', findUserByToken_1.findUserByToken(addCard_1.addCard, 'addCard'));
+cards.put('/card', findUserByToken_1.findUserByToken(updateCard_1.updateCard, 'updateCard'));
+cards.delete('/card', findUserByToken_1.findUserByToken(deleteCard_1.deleteCard, 'deleteCard', true));
 exports.default = cards;
 //# sourceMappingURL=index.js.map
