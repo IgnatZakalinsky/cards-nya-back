@@ -5,8 +5,8 @@ import {status400, status500} from "../../../f-1-auth/a-3-helpers/h-2-users/find
 import Card, {ICard} from "../../c-2-models/card";
 
 export const addCard = async (req: Request, res: Response, user: IUser) => {
-    const {card, cardsPack_id} = req.body;
-    const cardsPack_idF: string = cardsPack_id as string | undefined || '';
+    const {card} = req.body;
+    const cardsPack_idF: string = (card && card.cardsPack_id as string | undefined) || '';
 
     if (!card) status400(res, `No cardsPack in body!`, user, 'addCard');
 

@@ -16,8 +16,8 @@ const cardsPack_1 = __importDefault(require("../../c-2-models/cardsPack"));
 const findUserByToken_1 = require("../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
 const card_1 = __importDefault(require("../../c-2-models/card"));
 exports.addCard = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
-    const { card, cardsPack_id } = req.body;
-    const cardsPack_idF = cardsPack_id || '';
+    const { card } = req.body;
+    const cardsPack_idF = (card && card.cardsPack_id) || '';
     if (!card)
         findUserByToken_1.status400(res, `No cardsPack in body!`, user, 'addCard');
     else
