@@ -24,6 +24,8 @@ exports.deleteCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, 
             .then((cardsPack) => {
             if (!cardsPack)
                 findUserByToken_1.status400(res, `CardsPack id not valid`, user, 'deleteCardsPack');
+            else if (cardsPack.user_id !== user._id)
+                findUserByToken_1.status400(res, `not your CardsPack`, user, 'deleteCardsPack');
             else
                 res.status(200).json({
                     deletedCardsPack: cardsPack,

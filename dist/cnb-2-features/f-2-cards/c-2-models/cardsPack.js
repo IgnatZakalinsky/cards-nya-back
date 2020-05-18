@@ -13,6 +13,10 @@ const CardsPack = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         required: true
     },
+    user_name: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true

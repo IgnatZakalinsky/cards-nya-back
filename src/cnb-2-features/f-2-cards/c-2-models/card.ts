@@ -3,6 +3,7 @@ import mongoose, {Schema, Document} from "mongoose";
 export interface ICard extends Document {
     _id: mongoose.Types.ObjectId;
     cardsPack_id: mongoose.Types.ObjectId;
+    user_id: mongoose.Types.ObjectId;
 
     question: string;
     answer: string;
@@ -22,6 +23,10 @@ export interface ICard extends Document {
 const Card: Schema = new Schema(
     {
         cardsPack_id: {
+            type: Schema.Types.ObjectId,
+            required: true
+        },
+        user_id: {
             type: Schema.Types.ObjectId,
             required: true
         },

@@ -12,7 +12,13 @@ exports.routes = (app) => {
     //default
     app.use((req, res) => {
         console.log('Nya-bad url: ', req.method, req.url);
-        res.status(404).json({ error: 'bad url', method: req.method, url: req.url });
+        res.status(404).json({
+            error: 'bad url',
+            method: req.method,
+            url: req.url,
+            query: req.query,
+            body: req.body,
+        });
     });
 };
 //# sourceMappingURL=routes.js.map

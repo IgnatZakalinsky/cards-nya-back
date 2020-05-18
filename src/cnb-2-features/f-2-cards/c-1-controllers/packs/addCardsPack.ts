@@ -20,6 +20,7 @@ export const addCardsPack = async (req: Request, res: Response, user: IUser) => 
 
         else CardsPack.create({
             user_id: user._id,
+            user_name: user.name,
             name: nameF,
             path: pathF,
             grade: gradeF,

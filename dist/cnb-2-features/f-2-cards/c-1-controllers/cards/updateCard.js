@@ -34,6 +34,8 @@ exports.updateCard = (req, res, user) => __awaiter(void 0, void 0, void 0, funct
                 .then((oldCard) => {
                 if (!oldCard)
                     findUserByToken_1.status400(res, `Card id not valid`, user, 'updateCard');
+                else if (oldCard.user_id !== user._id)
+                    findUserByToken_1.status400(res, `not your Card`, user, 'updateCard');
                 else
                     card_1.default.findByIdAndUpdate(card._id, {
                         question: questionF || oldCard.question,

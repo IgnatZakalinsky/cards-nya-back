@@ -24,6 +24,8 @@ exports.deleteCard = (req, res, user) => __awaiter(void 0, void 0, void 0, funct
             .then((card) => {
             if (!card)
                 findUserByToken_1.status400(res, `Card id not valid`, user, 'deleteCard');
+            else if (card.user_id !== user._id)
+                findUserByToken_1.status400(res, `not your Card`, user, 'deleteCard');
             else
                 res.status(200).json({
                     deletedCard: card,

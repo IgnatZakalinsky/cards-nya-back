@@ -15,6 +15,8 @@ export const addCard = async (req: Request, res: Response, user: IUser) => {
         .then((oldCardsPack: ICardsPack | null) => {
             if (!oldCardsPack) status400(res, `CardsPack id not valid`, user, 'addCard');
 
+            else if (oldCardsPack.user_id !== user._id) status400(res, `not your CardsPack`, user, 'addCard');
+
             else {
                 const answerF = card.answer || 'no answer';
                 const questionF = card.question || 'no question';
@@ -27,6 +29,7 @@ export const addCard = async (req: Request, res: Response, user: IUser) => {
 
                 else Card.create({
                     cardsPack_id: cardsPack_idF,
+                    user_id: user._id,
                     answer: answerF,
                     question: questionF,
                     grade: gradeF,

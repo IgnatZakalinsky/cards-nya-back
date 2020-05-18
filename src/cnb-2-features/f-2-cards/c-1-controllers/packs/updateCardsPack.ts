@@ -24,6 +24,9 @@ export const updateCardsPack = async (req: Request, res: Response, user: IUser) 
             .then((oldCardsPack: ICardsPack | null) => {
                 if (!oldCardsPack) status400(res, `CardsPack id not valid`, user, 'updateCardsPack');
 
+                else if (oldCardsPack.user_id !== user._id)
+                    status400(res, `not your CardsPack`, user, 'updateCardsPack');
+
                 else CardsPack.findByIdAndUpdate(
                     cardsPack._id,
                     {

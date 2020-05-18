@@ -3,6 +3,7 @@ import mongoose, {Schema, Document} from "mongoose";
 export interface ICardsPack extends Document {
     _id: mongoose.Types.ObjectId;
     user_id: mongoose.Types.ObjectId;
+    user_name: string;
 
     name: string;
     path: string;
@@ -25,10 +26,15 @@ const CardsPack: Schema = new Schema(
             type: Schema.Types.ObjectId,
             required: true
         },
+        user_name: {
+            type: String,
+            required: true
+        },
         name: {
             type: String,
             required: true
         },
+
         path: {
             type: String,
             required: true

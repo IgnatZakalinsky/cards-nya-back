@@ -29,6 +29,7 @@ exports.addCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
         else
             cardsPack_1.default.create({
                 user_id: user._id,
+                user_name: user.name,
                 name: nameF,
                 path: pathF,
                 grade: gradeF,

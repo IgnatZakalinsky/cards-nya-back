@@ -13,6 +13,10 @@ const Card = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         required: true
     },
+    user_id: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        required: true
+    },
     question: {
         type: String,
         required: true
