@@ -26,7 +26,7 @@ exports.addCard = (req, res, user) => __awaiter(void 0, void 0, void 0, function
             .then((oldCardsPack) => {
             if (!oldCardsPack)
                 findUserByToken_1.status400(res, `CardsPack id not valid`, user, 'addCard');
-            else if (oldCardsPack.user_id !== user._id)
+            else if (!oldCardsPack.user_id.equals(user._id))
                 findUserByToken_1.status400(res, `not your CardsPack`, user, 'addCard');
             else {
                 const answerF = card.answer || 'no answer';

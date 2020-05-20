@@ -24,7 +24,7 @@ export const updateCard = async (req: Request, res: Response, user: IUser) => {
             .then((oldCard: ICard | null) => {
                 if (!oldCard) status400(res, `Card id not valid`, user, 'updateCard');
 
-                else if (oldCard.user_id !== user._id) status400(res, `not your Card`, user, 'updateCard');
+                else if (!oldCard.user_id.equals(user._id)) status400(res, `not your Card`, user, 'updateCard');
 
                 else Card.findByIdAndUpdate(
                     card._id,

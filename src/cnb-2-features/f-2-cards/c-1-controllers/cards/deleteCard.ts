@@ -13,7 +13,7 @@ export const deleteCard = async (req: Request, res: Response, user: IUser) => {
         .then((card: ICard | null) => {
             if (!card) status400(res, `Card id not valid`, user, 'deleteCard');
 
-            else if (card.user_id !== user._id) status400(res, `not your Card`, user, 'deleteCard');
+            else if (!card.user_id.equals(user._id)) status400(res, `not your Card`, user, 'deleteCard');
 
             else res.status(200).json({
                 deletedCard: card,

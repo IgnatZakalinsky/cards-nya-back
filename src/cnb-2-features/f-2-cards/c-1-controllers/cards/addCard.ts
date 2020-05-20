@@ -13,9 +13,10 @@ export const addCard = async (req: Request, res: Response, user: IUser) => {
     else CardsPack.findById(cardsPack_idF)
         .exec()
         .then((oldCardsPack: ICardsPack | null) => {
+
             if (!oldCardsPack) status400(res, `CardsPack id not valid`, user, 'addCard');
 
-            else if (oldCardsPack.user_id !== user._id) status400(res, `not your CardsPack`, user, 'addCard');
+            else if (!oldCardsPack.user_id.equals(user._id)) status400(res, `not your CardsPack`, user, 'addCard');
 
             else {
                 const answerF = card.answer || 'no answer';

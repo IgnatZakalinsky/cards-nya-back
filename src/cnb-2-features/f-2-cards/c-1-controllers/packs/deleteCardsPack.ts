@@ -13,7 +13,7 @@ export const deleteCardsPack = async (req: Request, res: Response, user: IUser) 
         .then((cardsPack: ICardsPack | null) => {
             if (!cardsPack) status400(res, `CardsPack id not valid`, user, 'deleteCardsPack');
 
-            else if (cardsPack.user_id !== user._id) status400(res, `not your CardsPack`, user, 'deleteCardsPack');
+            else if (!cardsPack.user_id.equals(user._id)) status400(res, `not your CardsPack`, user, 'deleteCardsPack');
 
             else res.status(200).json({
                 deletedCardsPack: cardsPack,
