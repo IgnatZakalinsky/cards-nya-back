@@ -51,6 +51,7 @@ exports.getCards = (req, res, user) => __awaiter(void 0, void 0, void 0, functio
                     const sortName = sortCardsF && sortCardsF.length > 2 ? sortCardsF.slice(1) : undefined;
                     const direction = sortName ? (sortCardsF[0] === '0' ? -1 : 1) : undefined;
                     card_1.default.find({
+                        cardsPack_id: cardsPack_idF,
                         question: new RegExp(cardQuestionF),
                         answer: new RegExp(cardAnswerF),
                         grade: { $gte: +min || minF, $lte: +max || maxF }
@@ -62,6 +63,7 @@ exports.getCards = (req, res, user) => __awaiter(void 0, void 0, void 0, functio
                         .exec()
                         .then(cards => {
                         card_1.default.count({
+                            cardsPack_id: cardsPack_idF,
                             question: new RegExp(cardQuestionF),
                             answer: new RegExp(cardAnswerF),
                             grade: { $gte: +min || minF, $lte: +max || maxF }

@@ -4,12 +4,14 @@ import CardsPack, {ICardsPack} from "../../c-2-models/cardsPack";
 import {status500} from "../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
 
 export const getCardPacks = async (req: Request, res: Response, user: IUser) => {
-    const {page, pageCount, sortPacks, packName, min, max} = req.query;
+    const {page, pageCount, sortPacks, packName, min, max, user_id} = req.query;
 
     let pageF = +page || 1;
     const pageCountF = +pageCount || 4;
     const sortPacksF: string = sortPacks as string | undefined || ''; // '0grade'
     const packNameF: string = packName as string | undefined || '';
+    const user_idF = user_id as string | undefined || undefined;
+    const user_idO = user_idF ? {user_id: user_idF} : undefined;
 
     // await CardsPack.create({
     //     user_id: user._id,
@@ -22,24 +24,32 @@ export const getCardPacks = async (req: Request, res: Response, user: IUser) => 
     //     rating: 0
     // }); // seed
 
-    CardsPack.findOne().sort({grade: 1})
+    CardsPack.findOne(user_idO)
+        .sort({grade: 1})
         .exec()
         .then((packMin: ICardsPack | null) => {
             const minF = packMin ? packMin.grade : 0;
 
-            CardsPack.findOne().sort({grade: -1}).exec()
+            CardsPack.findOne(user_idO)
+                .sort({grade: -1}).exec()
                 .then((packMax: ICardsPack | null) => {
                     const maxF = packMax ? packMax.grade : minF;
 
                     const sortName: any = sortPacksF && sortPacksF.length > 2 ? sortPacksF.slice(1) : undefined;
                     const direction = sortName ? (sortPacksF[0] === '0' ? -1 : 1) : undefined;
 
-                    CardsPack.find(
-                        {
+                    const findO = user_idO
+                        ? {
+                            user_id: user_idF,
                             name: new RegExp(packNameF as string),
                             grade: {$gte: +min || minF, $lte: +max || maxF}
                         }
-                    )
+                        : {
+                            name: new RegExp(packNameF as string),
+                            grade: {$gte: +min || minF, $lte: +max || maxF}
+                        };
+
+                    CardsPack.find(findO)
                         .sort({[sortName]: direction, updated: -1})
                         .skip(pageCountF * (pageF - 1))
                         .limit(pageCountF)
@@ -47,12 +57,7 @@ export const getCardPacks = async (req: Request, res: Response, user: IUser) => 
                         .exec()
                         .then(cardPacks => {
 
-                            CardsPack.count(
-                                {
-                                    name: new RegExp(packNameF as string),
-                                    grade: {$gte: +min || minF, $lte: +max || maxF}
-                                }
-                            )
+                            CardsPack.count(findO)
                                 .exec()
                                 .then(cardPacksTotalCount => {
                                     if (pageCountF * (pageF - 1) > cardPacksTotalCount) pageF = 1;

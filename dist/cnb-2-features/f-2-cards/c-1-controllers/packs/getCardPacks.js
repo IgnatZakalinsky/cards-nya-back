@@ -15,11 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cardsPack_1 = __importDefault(require("../../c-2-models/cardsPack"));
 const findUserByToken_1 = require("../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
 exports.getCardPacks = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
-    const { page, pageCount, sortPacks, packName, min, max } = req.query;
+    const { page, pageCount, sortPacks, packName, min, max, user_id } = req.query;
     let pageF = +page || 1;
     const pageCountF = +pageCount || 4;
     const sortPacksF = sortPacks || ''; // '0grade'
     const packNameF = packName || '';
+    const user_idF = user_id || undefined;
+    const user_idO = user_idF ? { user_id: user_idF } : undefined;
     // await CardsPack.create({
     //     user_id: user._id,
     //     name: 'fake2CardsPack',
@@ -30,29 +32,35 @@ exports.getCardPacks = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
     //     type: 'pack',
     //     rating: 0
     // }); // seed
-    cardsPack_1.default.findOne().sort({ grade: 1 })
+    cardsPack_1.default.findOne(user_idO)
+        .sort({ grade: 1 })
         .exec()
         .then((packMin) => {
         const minF = packMin ? packMin.grade : 0;
-        cardsPack_1.default.findOne().sort({ grade: -1 }).exec()
+        cardsPack_1.default.findOne(user_idO)
+            .sort({ grade: -1 }).exec()
             .then((packMax) => {
             const maxF = packMax ? packMax.grade : minF;
             const sortName = sortPacksF && sortPacksF.length > 2 ? sortPacksF.slice(1) : undefined;
             const direction = sortName ? (sortPacksF[0] === '0' ? -1 : 1) : undefined;
-            cardsPack_1.default.find({
-                name: new RegExp(packNameF),
-                grade: { $gte: +min || minF, $lte: +max || maxF }
-            })
+            const findO = user_idO
+                ? {
+                    user_id: user_idF,
+                    name: new RegExp(packNameF),
+                    grade: { $gte: +min || minF, $lte: +max || maxF }
+                }
+                : {
+                    name: new RegExp(packNameF),
+                    grade: { $gte: +min || minF, $lte: +max || maxF }
+                };
+            cardsPack_1.default.find(findO)
                 .sort({ [sortName]: direction, updated: -1 })
                 .skip(pageCountF * (pageF - 1))
                 .limit(pageCountF)
                 .lean()
                 .exec()
                 .then(cardPacks => {
-                cardsPack_1.default.count({
-                    name: new RegExp(packNameF),
-                    grade: { $gte: +min || minF, $lte: +max || maxF }
-                })
+                cardsPack_1.default.count(findO)
                     .exec()
                     .then(cardPacksTotalCount => {
                     if (pageCountF * (pageF - 1) > cardPacksTotalCount)

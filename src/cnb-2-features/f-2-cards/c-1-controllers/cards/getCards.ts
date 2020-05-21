@@ -46,6 +46,7 @@ export const getCards = async (req: Request, res: Response, user: IUser) => {
 
                             Card.find(
                                 {
+                                    cardsPack_id: cardsPack_idF,
                                     question: new RegExp(cardQuestionF as string),
                                     answer: new RegExp(cardAnswerF as string),
                                     grade: {$gte: +min || minF, $lte: +max || maxF}
@@ -60,6 +61,7 @@ export const getCards = async (req: Request, res: Response, user: IUser) => {
 
                                     Card.count(
                                         {
+                                            cardsPack_id: cardsPack_idF,
                                             question: new RegExp(cardQuestionF as string),
                                             answer: new RegExp(cardAnswerF as string),
                                             grade: {$gte: +min || minF, $lte: +max || maxF}
