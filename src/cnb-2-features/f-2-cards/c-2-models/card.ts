@@ -10,6 +10,13 @@ export interface ICard extends Document {
     grade: number;
     shots: number;
 
+    questionImg: string;
+    answerImg: string;
+    answerVideo: string;
+    questionVideo: string;
+
+    comments: string;
+
     type: string;
     rating: number;
     more_id: mongoose.Types.ObjectId;
@@ -46,6 +53,22 @@ const Card: Schema = new Schema(
             type: Number,
             required: true
         },
+        questionImg: {
+            type: String,
+        },
+        answerImg: {
+            type: String,
+        },
+        answerVideo: {
+            type: String,
+        },
+        questionVideo: {
+            type: String,
+        },
+        comments: {
+            type: String,
+        },
+
 
         type: {
             type: String,

@@ -4,11 +4,15 @@ export interface ICardsPack extends Document {
     _id: mongoose.Types.ObjectId;
     user_id: mongoose.Types.ObjectId;
     user_name: string;
+    private: boolean;
 
     name: string;
     path: string;
     grade: number;
     shots: number;
+
+    cardsCount: number;
+    deckCover: string;
 
     type: string;
     rating: number;
@@ -34,6 +38,10 @@ const CardsPack: Schema = new Schema(
             type: String,
             required: true
         },
+        private: {
+            type: Boolean,
+            required: true
+        },
 
         path: {
             type: String,
@@ -46,6 +54,13 @@ const CardsPack: Schema = new Schema(
         shots: {
             type: Number,
             required: true
+        },
+        cardsCount: {
+            type: Number,
+            required: true
+        },
+        deckCover: {
+            type: String,
         },
 
         type: {

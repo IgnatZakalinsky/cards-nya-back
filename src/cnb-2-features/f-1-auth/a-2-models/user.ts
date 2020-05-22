@@ -9,6 +9,20 @@ export interface IUser extends Document {
 
     name: string;
     verified: boolean;
+    avatar: string;
+
+    // grades: [
+    //     {
+    //         pack_id: mongoose.Types.ObjectId;
+    //         cardsGrades: [
+    //             {
+    //                 card_id: mongoose.Types.ObjectId;
+    //                 grade: number;
+    //                 shots: number;
+    //             }
+    //         ]
+    //     }
+    // ]
 
     token: string;
     tokenDeathTime: number;
@@ -48,7 +62,9 @@ const UserSchema: Schema = new Schema(
             type: Boolean,
             required: true
         },
-
+        avatar: {
+            type: String,
+        },
 
         token: {
             type: String,

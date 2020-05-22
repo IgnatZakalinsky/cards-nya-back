@@ -34,6 +34,12 @@ export const updateCard = async (req: Request, res: Response, user: IUser) => {
                         type: typeF || oldCard.type,
                         grade: gradeF || oldCard.grade,
                         shots: shotsF || oldCard.shots,
+                        // questionImg: string;
+                        // answerImg: string;
+                        // answerVideo: string;
+                        // questionVideo: string;
+                        //
+                        // comments: string;
                     },
                     {new: true}
                 )

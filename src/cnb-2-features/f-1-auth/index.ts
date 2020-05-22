@@ -14,6 +14,7 @@ auth.get('/', getUsersForDev); // for dev
 auth.post('/login', logIn);
 auth.post('/register', createUser);
 auth.post('/me', findUserByToken(getMe, 'getMe'));
+// auth.put('/me', findUserByToken(getMe, 'getMe'));
 auth.post('/forgot', passwordRecovery);
 auth.post('/set-new-password', setNewPassword);
 

@@ -36,6 +36,11 @@ export const addCard = async (req: Request, res: Response, user: IUser) => {
                     grade: gradeF,
                     shots: shotsF,
 
+                    // questionImg: string;
+                    // answerImg: string;
+                    // answerVideo: string;
+                    // questionVideo: string;
+
                     type: typeF,
                     rating: 0
                 })
