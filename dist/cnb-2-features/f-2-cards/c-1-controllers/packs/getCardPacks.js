@@ -46,11 +46,11 @@ exports.getCardPacks = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
             const findO = user_idO
                 ? {
                     user_id: user_idF,
-                    name: new RegExp(packNameF),
+                    name: new RegExp(packNameF, 'gi'),
                     grade: { $gte: +min || minF, $lte: +max || maxF }
                 }
                 : {
-                    name: new RegExp(packNameF),
+                    name: new RegExp(packNameF, 'gi'),
                     grade: { $gte: +min || minF, $lte: +max || maxF }
                 };
             cardsPack_1.default.find(findO)

@@ -41,11 +41,11 @@ export const getCardPacks = async (req: Request, res: Response, user: IUser) => 
                     const findO = user_idO
                         ? {
                             user_id: user_idF,
-                            name: new RegExp(packNameF as string),
+                            name: new RegExp(packNameF as string, 'gi'),
                             grade: {$gte: +min || minF, $lte: +max || maxF}
                         }
                         : {
-                            name: new RegExp(packNameF as string),
+                            name: new RegExp(packNameF as string, 'gi'),
                             grade: {$gte: +min || minF, $lte: +max || maxF}
                         };
 
