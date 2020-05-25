@@ -25,7 +25,7 @@ exports.updateUser = (req, res, user) => __awaiter(void 0, void 0, void 0, funct
         if (!updatedUser)
             findUserByToken_1.status400(res, `never`, user, 'updateUser');
         else {
-            const body = Object.assign({}, updatedUser);
+            const body = Object.assign({}, updatedUser._doc);
             delete body.password; // don't send password to the front
             delete body.resetPasswordToken;
             delete body.resetPasswordTokenDeathTime;

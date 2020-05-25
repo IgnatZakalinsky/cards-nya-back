@@ -18,7 +18,7 @@ export const updateUser = async (req: Request, res: Response, user: IUser) => {
             if (!updatedUser) status400(res, `never`, user, 'updateUser');
 
             else {
-                const body: any = {...updatedUser};
+                const body: any = {...updatedUser._doc};
 
                 delete body.password; // don't send password to the front
                 delete body.resetPasswordToken;
