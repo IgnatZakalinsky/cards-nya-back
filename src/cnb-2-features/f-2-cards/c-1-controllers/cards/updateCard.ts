@@ -26,35 +26,43 @@ export const updateCard = async (req: Request, res: Response, user: IUser) => {
 
                 else if (!oldCard.user_id.equals(user._id)) status400(res, `not your Card`, user, 'updateCard');
 
-                else Card.findByIdAndUpdate(
-                    card._id,
-                    {
-                        question: questionF || oldCard.question,
-                        answer: answerF || oldCard.answer,
-                        type: typeF || oldCard.type,
-                        grade: gradeF || oldCard.grade,
-                        shots: shotsF || oldCard.shots,
-                        // questionImg: string;
-                        // answerImg: string;
-                        // answerVideo: string;
-                        // questionVideo: string;
-                        //
-                        // comments: string;
-                    },
-                    {new: true}
-                )
-                    .exec()
-                    .then((updatedCard: ICard | null) => {
-                        if (!updatedCard) status400(res, `never`, user, 'updateCard');
+                else {
+                    let commentsF = oldCard.comments;
+                    if (card.comments)
+                        if (user._id.equals(oldCard.user_id)) commentsF = card.comments;
+                        else commentsF += '\n' + card.comments;
 
-                        else res.status(200).json({
-                            updatedCard,
-                            success: true,
-                            token: user.token,
-                            tokenDeathTime: user.tokenDeathTime
+                    Card.findByIdAndUpdate(
+                        card._id,
+                        {
+                            question: questionF || oldCard.question,
+                            answer: answerF || oldCard.answer,
+                            type: typeF || oldCard.type,
+                            grade: gradeF || oldCard.grade,
+                            shots: shotsF || oldCard.shots,
+
+                            questionImg: card.questionImg || oldCard.questionImg,
+                            answerImg: card.answerImg || oldCard.answerImg,
+                            answerVideo: card.answerVideo || oldCard.answerVideo,
+                            questionVideo: card.questionVideo || oldCard.questionVideo,
+
+                            comments: commentsF,
+                        },
+                        {new: true}
+                    )
+                        .exec()
+                        .then((updatedCard: ICard | null) => {
+                            if (!updatedCard) status400(res, `never`, user, 'updateCard');
+
+                            else res.status(200).json({
+                                updatedCard,
+                                success: true,
+                                token: user.token,
+                                tokenDeathTime: user.tokenDeathTime
+                            })
                         })
-                    })
-                    .catch(e => status500(res, e, user, 'updateCard/Card.findByIdAndUpdate'))
+                        .catch(e => status500(res, e, user, 'updateCard/Card.findByIdAndUpdate'))
+                }
             })
             .catch(e => status500(res, e, user, 'updateCard/Card.findById'));
     }

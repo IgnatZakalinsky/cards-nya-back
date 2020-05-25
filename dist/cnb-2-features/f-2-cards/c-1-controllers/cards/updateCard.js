@@ -36,13 +36,24 @@ exports.updateCard = (req, res, user) => __awaiter(void 0, void 0, void 0, funct
                     findUserByToken_1.status400(res, `Card id not valid`, user, 'updateCard');
                 else if (!oldCard.user_id.equals(user._id))
                     findUserByToken_1.status400(res, `not your Card`, user, 'updateCard');
-                else
+                else {
+                    let commentsF = oldCard.comments;
+                    if (card.comments)
+                        if (user._id.equals(oldCard.user_id))
+                            commentsF = card.comments;
+                        else
+                            commentsF += '\n' + card.comments;
                     card_1.default.findByIdAndUpdate(card._id, {
                         question: questionF || oldCard.question,
                         answer: answerF || oldCard.answer,
                         type: typeF || oldCard.type,
                         grade: gradeF || oldCard.grade,
                         shots: shotsF || oldCard.shots,
+                        questionImg: card.questionImg || oldCard.questionImg,
+                        answerImg: card.answerImg || oldCard.answerImg,
+                        answerVideo: card.answerVideo || oldCard.answerVideo,
+                        questionVideo: card.questionVideo || oldCard.questionVideo,
+                        comments: commentsF,
                     }, { new: true })
                         .exec()
                         .then((updatedCard) => {
@@ -57,6 +68,7 @@ exports.updateCard = (req, res, user) => __awaiter(void 0, void 0, void 0, funct
                             });
                     })
                         .catch(e => findUserByToken_1.status500(res, e, user, 'updateCard/Card.findByIdAndUpdate'));
+                }
             })
                 .catch(e => findUserByToken_1.status500(res, e, user, 'updateCard/Card.findById'));
     }
