@@ -21,6 +21,10 @@ const CardsPack = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    private: {
+        type: Boolean,
+        required: true
+    },
     path: {
         type: String,
         required: true
@@ -32,6 +36,13 @@ const CardsPack = new mongoose_1.Schema({
     shots: {
         type: Number,
         required: true
+    },
+    cardsCount: {
+        type: Number,
+        required: true
+    },
+    deckCover: {
+        type: String,
     },
     type: {
         type: String,

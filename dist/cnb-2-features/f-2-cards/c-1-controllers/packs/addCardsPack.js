@@ -24,16 +24,19 @@ exports.addCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
         const typeF = cardsPack.type || 'pack';
         const gradeF = isFinite(cardsPack.grade) ? +cardsPack.grade : 0;
         const shotsF = isFinite(cardsPack.shots) ? +cardsPack.shots : 0;
+        // add private
         if (gradeF > 5 || gradeF < 0)
             findUserByToken_1.status400(res, `CardsPack grade [${gradeF}] not valid! must be between 0 and 5...`, user, 'addCardsPack');
         else
             cardsPack_1.default.create({
                 user_id: user._id,
                 user_name: user.name,
+                private: false,
                 name: nameF,
                 path: pathF,
                 grade: gradeF,
                 shots: shotsF,
+                cardsCount: 0,
                 type: typeF,
                 rating: 0
             })

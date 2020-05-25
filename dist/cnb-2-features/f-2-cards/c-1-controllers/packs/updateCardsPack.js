@@ -38,6 +38,7 @@ exports.updateCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, 
                     findUserByToken_1.status400(res, `not your CardsPack`, user, 'updateCardsPack');
                 else
                     cardsPack_1.default.findByIdAndUpdate(cardsPack._id, {
+                        // private: false,
                         name: nameF || oldCardsPack.name,
                         path: pathF || oldCardsPack.path,
                         type: typeF || oldCardsPack.type,

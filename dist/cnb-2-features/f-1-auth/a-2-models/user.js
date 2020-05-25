@@ -34,6 +34,9 @@ const UserSchema = new mongoose_1.Schema({
         type: Boolean,
         required: true
     },
+    avatar: {
+        type: String,
+    },
     token: {
         type: String,
     },

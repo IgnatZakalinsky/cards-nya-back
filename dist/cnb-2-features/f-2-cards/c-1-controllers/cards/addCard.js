@@ -44,6 +44,10 @@ exports.addCard = (req, res, user) => __awaiter(void 0, void 0, void 0, function
                         question: questionF,
                         grade: gradeF,
                         shots: shotsF,
+                        // questionImg: string;
+                        // answerImg: string;
+                        // answerVideo: string;
+                        // questionVideo: string;
                         type: typeF,
                         rating: 0
                     })

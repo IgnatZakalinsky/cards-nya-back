@@ -33,6 +33,21 @@ const Card = new mongoose_1.Schema({
         type: Number,
         required: true
     },
+    questionImg: {
+        type: String,
+    },
+    answerImg: {
+        type: String,
+    },
+    answerVideo: {
+        type: String,
+    },
+    questionVideo: {
+        type: String,
+    },
+    comments: {
+        type: String,
+    },
     type: {
         type: String,
     },
