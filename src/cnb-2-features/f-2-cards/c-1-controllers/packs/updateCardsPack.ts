@@ -30,13 +30,13 @@ export const updateCardsPack = async (req: Request, res: Response, user: IUser) 
                 else CardsPack.findByIdAndUpdate(
                     cardsPack._id,
                     {
-                        // private: false,
+                        private: !!cardsPack.private,
                         name: nameF || oldCardsPack.name,
                         path: pathF || oldCardsPack.path,
                         type: typeF || oldCardsPack.type,
                         grade: gradeF || oldCardsPack.grade,
                         shots: shotsF || oldCardsPack.shots,
-                        // deckCover: string;
+                        deckCover: cardsPack.deckCover,
                     },
                     {new: true}
                 )

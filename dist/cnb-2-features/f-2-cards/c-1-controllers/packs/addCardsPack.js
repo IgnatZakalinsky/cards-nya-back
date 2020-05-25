@@ -31,11 +31,12 @@ exports.addCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
             cardsPack_1.default.create({
                 user_id: user._id,
                 user_name: user.name,
-                private: false,
+                private: !!cardsPack.private,
                 name: nameF,
                 path: pathF,
                 grade: gradeF,
                 shots: shotsF,
+                deckCover: cardsPack.deckCover,
                 cardsCount: 0,
                 type: typeF,
                 rating: 0

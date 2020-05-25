@@ -38,16 +38,18 @@ export const getCardPacks = async (req: Request, res: Response, user: IUser) => 
                     const sortName: any = sortPacksF && sortPacksF.length > 2 ? sortPacksF.slice(1) : undefined;
                     const direction = sortName ? (sortPacksF[0] === '0' ? -1 : 1) : undefined;
 
-                    const findO = user_idO
-                        ? {
-                            user_id: user_idF,
-                            name: new RegExp(packNameF as string, 'gi'),
-                            grade: {$gte: +min || minF, $lte: +max || maxF}
-                        }
-                        : {
-                            name: new RegExp(packNameF as string, 'gi'),
-                            grade: {$gte: +min || minF, $lte: +max || maxF}
-                        };
+                    const findBase = {
+                        name: new RegExp(packNameF as string, 'gi'),
+                        grade: {$gte: +min || minF, $lte: +max || maxF}
+                    };
+                    const findPrivate = user_idF && user._id.equals(user_idF) ? {} : {private: false};
+                    const findByUserId = user_id ? {user_id: user_idF} : {};
+
+                    const findO = {
+                        ...findByUserId,
+                        ...findBase,
+                        ...findPrivate
+                    };
 
                     CardsPack.find(findO)
                         .sort({[sortName]: direction, updated: -1})

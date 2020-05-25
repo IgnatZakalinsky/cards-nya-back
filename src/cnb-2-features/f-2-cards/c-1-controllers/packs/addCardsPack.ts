@@ -22,12 +22,13 @@ export const addCardsPack = async (req: Request, res: Response, user: IUser) => 
         else CardsPack.create({
             user_id: user._id,
             user_name: user.name,
-            private: false,
+            private: !!cardsPack.private,
 
             name: nameF,
             path: pathF,
             grade: gradeF,
             shots: shotsF,
+            deckCover: cardsPack.deckCover,
 
             cardsCount: 0,
             type: typeF,

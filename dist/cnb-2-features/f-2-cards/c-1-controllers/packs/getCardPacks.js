@@ -43,16 +43,13 @@ exports.getCardPacks = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
             const maxF = packMax ? packMax.grade : minF;
             const sortName = sortPacksF && sortPacksF.length > 2 ? sortPacksF.slice(1) : undefined;
             const direction = sortName ? (sortPacksF[0] === '0' ? -1 : 1) : undefined;
-            const findO = user_idO
-                ? {
-                    user_id: user_idF,
-                    name: new RegExp(packNameF, 'gi'),
-                    grade: { $gte: +min || minF, $lte: +max || maxF }
-                }
-                : {
-                    name: new RegExp(packNameF, 'gi'),
-                    grade: { $gte: +min || minF, $lte: +max || maxF }
-                };
+            const findBase = {
+                name: new RegExp(packNameF, 'gi'),
+                grade: { $gte: +min || minF, $lte: +max || maxF }
+            };
+            const findPrivate = user_idF && user._id.equals(user_idF) ? {} : { private: false };
+            const findByUserId = user_id ? { user_id: user_idF } : {};
+            const findO = Object.assign(Object.assign(Object.assign({}, findByUserId), findBase), findPrivate);
             cardsPack_1.default.find(findO)
                 .sort({ [sortName]: direction, updated: -1 })
                 .skip(pageCountF * (pageF - 1))
