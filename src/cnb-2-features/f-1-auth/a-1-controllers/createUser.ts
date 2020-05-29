@@ -14,6 +14,7 @@ export const createUser = async (req: Request, res: Response) => {
                 isAdmin: false,
                 name: req.body.email,
                 verified: false,
+                publicCardPacksCount: 0,
             });
 
             const addedUser: any = {...user._doc};

@@ -10,6 +10,7 @@ export interface IUser extends Document {
     name: string;
     verified: boolean;
     avatar: string;
+    publicCardPacksCount: number;
 
     // grades: [
     //     {
@@ -64,6 +65,10 @@ const UserSchema: Schema = new Schema(
         },
         avatar: {
             type: String,
+        },
+        publicCardPacksCount: {
+            type: Number,
+            required: true
         },
 
         token: {

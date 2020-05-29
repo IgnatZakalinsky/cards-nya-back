@@ -37,6 +37,10 @@ const UserSchema = new mongoose_1.Schema({
     avatar: {
         type: String,
     },
+    publicCardPacksCount: {
+        type: Number,
+        required: true
+    },
     token: {
         type: String,
     },

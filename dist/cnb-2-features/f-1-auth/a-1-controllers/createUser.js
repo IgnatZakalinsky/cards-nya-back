@@ -26,6 +26,7 @@ exports.createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 isAdmin: false,
                 name: req.body.email,
                 verified: false,
+                publicCardPacksCount: 0,
             });
             const addedUser = Object.assign({}, user._doc);
             delete addedUser.password; // don't send password to the front
