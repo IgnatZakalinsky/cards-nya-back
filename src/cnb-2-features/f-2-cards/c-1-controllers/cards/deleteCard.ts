@@ -8,19 +8,27 @@ export const deleteCard = async (req: Request, res: Response, user: IUser) => {
 
     if (!id) status400(res, `No Card id`, user, 'deleteCard');
 
-    else Card.findByIdAndDelete(id)
+    else Card.findById(id)
         .exec()
-        .then((card: ICard | null) => {
-            if (!card) status400(res, `Card id not valid`, user, 'deleteCard');
+        .then((cardF: ICard | null) => {
+            if (!cardF) status400(res, `Card id not valid`, user, 'deleteCard/Card.findById');
 
-            else if (!card.user_id.equals(user._id)) status400(res, `not your Card`, user, 'deleteCard');
+            else if (!cardF.user_id.equals(user._id)) status400(res, `not your Card`, user, 'deleteCard');
 
-            else res.status(200).json({
-                deletedCard: card,
-                success: true,
-                token: user.token,
-                tokenDeathTime: user.tokenDeathTime
-            })
+            else Card.findByIdAndDelete(id)
+                    .exec()
+                    .then((card: ICard | null) => {
+                        if (!card)
+                            status400(res, `Card id not valid`, user, 'deleteCard/Card.findByIdAndDelete');
+
+                        else res.status(200).json({
+                            deletedCard: card,
+                            success: true,
+                            token: user.token,
+                            tokenDeathTime: user.tokenDeathTime
+                        })
+                    })
+                    .catch(e => status500(res, e, user, 'deleteCard/Card.findByIdAndDelete'));
         })
-        .catch(e => status500(res, e, user, 'deleteCard/Card.findByIdAndDelete'));
+        .catch(e => status500(res, e, user, 'deleteCard/Card.findById'));
 };

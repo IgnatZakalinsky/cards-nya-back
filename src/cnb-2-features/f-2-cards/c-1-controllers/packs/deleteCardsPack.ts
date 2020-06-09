@@ -8,19 +8,30 @@ export const deleteCardsPack = async (req: Request, res: Response, user: IUser) 
 
     if (!id) status400(res, `No CardsPack id`, user, 'deleteCardsPack');
 
-    else CardsPack.findByIdAndDelete(id)
+    else CardsPack.findById(id)
         .exec()
-        .then((cardsPack: ICardsPack | null) => {
-            if (!cardsPack) status400(res, `CardsPack id not valid`, user, 'deleteCardsPack');
+        .then((cardsPackF: ICardsPack | null) => {
+            if (!cardsPackF)
+                status400(res, `CardsPack id not valid`, user, 'deleteCardsPack/CardsPack.findById');
 
-            else if (!cardsPack.user_id.equals(user._id)) status400(res, `not your CardsPack`, user, 'deleteCardsPack');
+            else if (!cardsPackF.user_id.equals(user._id))
+                status400(res, `not your CardsPack`, user, 'deleteCardsPack');
 
-            else res.status(200).json({
-                deletedCardsPack: cardsPack,
-                success: true,
-                token: user.token,
-                tokenDeathTime: user.tokenDeathTime
-            })
+            else CardsPack.findByIdAndDelete(id)
+                    .exec()
+                    .then((cardsPack: ICardsPack | null) => {
+                        if (!cardsPack) status400(
+                            res, `CardsPack id not valid`, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'
+                        );
+
+                        else res.status(200).json({
+                            deletedCardsPack: cardsPack,
+                            success: true,
+                            token: user.token,
+                            tokenDeathTime: user.tokenDeathTime
+                        })
+                    })
+                    .catch(e => status500(res, e, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'));
         })
-        .catch(e => status500(res, e, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'));
+        .catch(e => status500(res, e, user, 'deleteCardsPack/CardsPack.findById'));
 };

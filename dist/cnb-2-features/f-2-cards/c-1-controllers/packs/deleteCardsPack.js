@@ -19,21 +19,29 @@ exports.deleteCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, 
     if (!id)
         findUserByToken_1.status400(res, `No CardsPack id`, user, 'deleteCardsPack');
     else
-        cardsPack_1.default.findByIdAndDelete(id)
+        cardsPack_1.default.findById(id)
             .exec()
-            .then((cardsPack) => {
-            if (!cardsPack)
-                findUserByToken_1.status400(res, `CardsPack id not valid`, user, 'deleteCardsPack');
-            else if (!cardsPack.user_id.equals(user._id))
+            .then((cardsPackF) => {
+            if (!cardsPackF)
+                findUserByToken_1.status400(res, `CardsPack id not valid`, user, 'deleteCardsPack/CardsPack.findById');
+            else if (!cardsPackF.user_id.equals(user._id))
                 findUserByToken_1.status400(res, `not your CardsPack`, user, 'deleteCardsPack');
             else
-                res.status(200).json({
-                    deletedCardsPack: cardsPack,
-                    success: true,
-                    token: user.token,
-                    tokenDeathTime: user.tokenDeathTime
-                });
+                cardsPack_1.default.findByIdAndDelete(id)
+                    .exec()
+                    .then((cardsPack) => {
+                    if (!cardsPack)
+                        findUserByToken_1.status400(res, `CardsPack id not valid`, user, 'deleteCardsPack/CardsPack.findByIdAndDelete');
+                    else
+                        res.status(200).json({
+                            deletedCardsPack: cardsPack,
+                            success: true,
+                            token: user.token,
+                            tokenDeathTime: user.tokenDeathTime
+                        });
+                })
+                    .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'));
         })
-            .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'));
+            .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCardsPack/CardsPack.findById'));
 });
 //# sourceMappingURL=deleteCardsPack.js.map

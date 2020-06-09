@@ -19,21 +19,29 @@ exports.deleteCard = (req, res, user) => __awaiter(void 0, void 0, void 0, funct
     if (!id)
         findUserByToken_1.status400(res, `No Card id`, user, 'deleteCard');
     else
-        card_1.default.findByIdAndDelete(id)
+        card_1.default.findById(id)
             .exec()
-            .then((card) => {
-            if (!card)
-                findUserByToken_1.status400(res, `Card id not valid`, user, 'deleteCard');
-            else if (!card.user_id.equals(user._id))
+            .then((cardF) => {
+            if (!cardF)
+                findUserByToken_1.status400(res, `Card id not valid`, user, 'deleteCard/Card.findById');
+            else if (!cardF.user_id.equals(user._id))
                 findUserByToken_1.status400(res, `not your Card`, user, 'deleteCard');
             else
-                res.status(200).json({
-                    deletedCard: card,
-                    success: true,
-                    token: user.token,
-                    tokenDeathTime: user.tokenDeathTime
-                });
+                card_1.default.findByIdAndDelete(id)
+                    .exec()
+                    .then((card) => {
+                    if (!card)
+                        findUserByToken_1.status400(res, `Card id not valid`, user, 'deleteCard/Card.findByIdAndDelete');
+                    else
+                        res.status(200).json({
+                            deletedCard: card,
+                            success: true,
+                            token: user.token,
+                            tokenDeathTime: user.tokenDeathTime
+                        });
+                })
+                    .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCard/Card.findByIdAndDelete'));
         })
-            .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCard/Card.findByIdAndDelete'));
+            .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCard/Card.findById'));
 });
 //# sourceMappingURL=deleteCard.js.map
