@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const user_1 = __importDefault(require("../../../f-1-auth/a-2-models/user"));
 const findUserByToken_1 = require("../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
 const cardsPack_1 = __importDefault(require("../../c-2-models/cardsPack"));
 exports.deleteCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,13 +33,27 @@ exports.deleteCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, 
                     .then((cardsPack) => {
                     if (!cardsPack)
                         findUserByToken_1.status400(res, `CardsPack id not valid`, user, 'deleteCardsPack/CardsPack.findByIdAndDelete');
-                    else
-                        res.status(200).json({
-                            deletedCardsPack: cardsPack,
-                            success: true,
-                            token: user.token,
-                            tokenDeathTime: user.tokenDeathTime
-                        });
+                    else {
+                        cardsPack_1.default.count({ user_id: user._id, private: false })
+                            .exec()
+                            .then(cardPacksTotalCount => {
+                            user_1.default.findByIdAndUpdate(user._id, { publicCardPacksCount: cardPacksTotalCount }, { new: true })
+                                .exec()
+                                .then((updatedUser) => {
+                                if (!updatedUser)
+                                    findUserByToken_1.status400(res, `never`, user, 'deleteCardsPack');
+                                else
+                                    res.status(200).json({
+                                        deletedCardsPack: cardsPack,
+                                        success: true,
+                                        token: user.token,
+                                        tokenDeathTime: user.tokenDeathTime
+                                    });
+                            })
+                                .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCardsPack/User.findByIdAndUpdate'));
+                        })
+                            .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCardsPack/CardsPack.count'));
+                    }
                 })
                     .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'));
         })

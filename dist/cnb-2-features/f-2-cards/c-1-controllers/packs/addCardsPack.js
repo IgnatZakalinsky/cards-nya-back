@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const user_1 = __importDefault(require("../../../f-1-auth/a-2-models/user"));
 const cardsPack_1 = __importDefault(require("../../c-2-models/cardsPack"));
 const findUserByToken_1 = require("../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
 exports.addCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,12 +42,27 @@ exports.addCardsPack = (req, res, user) => __awaiter(void 0, void 0, void 0, fun
                 type: typeF,
                 rating: 0
             })
-                .then((newCardsPack) => res.status(201).json({
-                newCardsPack,
-                success: true,
-                token: user.token,
-                tokenDeathTime: user.tokenDeathTime
-            }))
+                .then((newCardsPack) => {
+                cardsPack_1.default.count({ user_id: user._id, private: false })
+                    .exec()
+                    .then(cardPacksTotalCount => {
+                    user_1.default.findByIdAndUpdate(user._id, { publicCardPacksCount: cardPacksTotalCount }, { new: true })
+                        .exec()
+                        .then((updatedUser) => {
+                        if (!updatedUser)
+                            findUserByToken_1.status400(res, `never`, user, 'addCardsPack');
+                        else
+                            res.status(201).json({
+                                newCardsPack,
+                                success: true,
+                                token: user.token,
+                                tokenDeathTime: user.tokenDeathTime
+                            });
+                    })
+                        .catch(e => findUserByToken_1.status500(res, e, user, 'addCardsPack/User.findByIdAndUpdate'));
+                })
+                    .catch(e => findUserByToken_1.status500(res, e, user, 'addCardsPack/CardsPack.count'));
+            })
                 .catch(e => findUserByToken_1.status500(res, e, user, 'addCardsPack/CardsPack.create'));
     }
 });

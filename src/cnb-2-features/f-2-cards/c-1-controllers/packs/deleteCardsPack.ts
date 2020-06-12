@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {IUser} from "../../../f-1-auth/a-2-models/user";
+import User, {IUser} from "../../../f-1-auth/a-2-models/user";
 import {status400, status500} from "../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
 import CardsPack, {ICardsPack} from "../../c-2-models/cardsPack";
 
@@ -24,12 +24,32 @@ export const deleteCardsPack = async (req: Request, res: Response, user: IUser) 
                             res, `CardsPack id not valid`, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'
                         );
 
-                        else res.status(200).json({
-                            deletedCardsPack: cardsPack,
-                            success: true,
-                            token: user.token,
-                            tokenDeathTime: user.tokenDeathTime
-                        })
+                        else {
+                            CardsPack.count({user_id: user._id, private: false})
+                                .exec()
+                                .then(cardPacksTotalCount => {
+
+                                    User.findByIdAndUpdate(
+                                        user._id,
+                                        {publicCardPacksCount: cardPacksTotalCount},
+                                        {new: true}
+                                    )
+                                        .exec()
+                                        .then((updatedUser: IUser | null) => {
+                                            if (!updatedUser) status400(res, `never`, user, 'deleteCardsPack');
+
+                                            else res.status(200).json({
+                                                deletedCardsPack: cardsPack,
+                                                success: true,
+                                                token: user.token,
+                                                tokenDeathTime: user.tokenDeathTime
+                                            })
+                                        })
+                                        .catch(e =>
+                                            status500(res, e, user, 'deleteCardsPack/User.findByIdAndUpdate'))
+                                })
+                                .catch(e => status500(res, e, user, 'deleteCardsPack/CardsPack.count'));
+                        }
                     })
                     .catch(e => status500(res, e, user, 'deleteCardsPack/CardsPack.findByIdAndDelete'));
         })

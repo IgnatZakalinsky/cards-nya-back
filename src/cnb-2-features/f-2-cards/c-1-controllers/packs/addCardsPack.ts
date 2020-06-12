@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {IUser} from "../../../f-1-auth/a-2-models/user";
+import User, {IUser} from "../../../f-1-auth/a-2-models/user";
 import CardsPack, {ICardsPack} from "../../c-2-models/cardsPack";
 import {status400, status500} from "../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
 
@@ -34,13 +34,32 @@ export const addCardsPack = async (req: Request, res: Response, user: IUser) => 
             type: typeF,
             rating: 0
         })
-            .then((newCardsPack: ICardsPack) => res.status(201).json({
-                newCardsPack,
-                success: true,
-                token: user.token,
-                tokenDeathTime: user.tokenDeathTime
-            }))
+            .then((newCardsPack: ICardsPack) => {
+                CardsPack.count({user_id: user._id, private: false})
+                    .exec()
+                    .then(cardPacksTotalCount => {
 
+                        User.findByIdAndUpdate(
+                            user._id,
+                            {publicCardPacksCount: cardPacksTotalCount},
+                            {new: true}
+                        )
+                            .exec()
+                            .then((updatedUser: IUser | null) => {
+                                if (!updatedUser) status400(res, `never`, user, 'addCardsPack');
+
+                                else res.status(201).json({
+                                    newCardsPack,
+                                    success: true,
+                                    token: user.token,
+                                    tokenDeathTime: user.tokenDeathTime
+                                })
+                            })
+                            .catch(e =>
+                                status500(res, e, user, 'addCardsPack/User.findByIdAndUpdate'))
+                    })
+                    .catch(e => status500(res, e, user, 'addCardsPack/CardsPack.count'));
+            })
             .catch(e => status500(res, e, user, 'addCardsPack/CardsPack.create'));
     }
 };
