@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const findUserByToken_1 = require("../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
 const card_1 = __importDefault(require("../../c-2-models/card"));
+const cardsPack_1 = __importDefault(require("../../c-2-models/cardsPack"));
 exports.deleteCard = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.query;
     if (!id)
@@ -32,13 +33,27 @@ exports.deleteCard = (req, res, user) => __awaiter(void 0, void 0, void 0, funct
                     .then((card) => {
                     if (!card)
                         findUserByToken_1.status400(res, `Card id not valid`, user, 'deleteCard/Card.findByIdAndDelete');
-                    else
-                        res.status(200).json({
-                            deletedCard: card,
-                            success: true,
-                            token: user.token,
-                            tokenDeathTime: user.tokenDeathTime
-                        });
+                    else {
+                        card_1.default.count({ cardsPack_id: card.cardsPack_id })
+                            .exec()
+                            .then(cardsTotalCount => {
+                            cardsPack_1.default.findByIdAndUpdate(card.cardsPack_id, { cardsCount: cardsTotalCount }, { new: true })
+                                .exec()
+                                .then((updatedCardsPack) => {
+                                if (!updatedCardsPack)
+                                    findUserByToken_1.status400(res, `never`, user, 'deleteCard');
+                                else
+                                    res.status(200).json({
+                                        deletedCard: card,
+                                        success: true,
+                                        token: user.token,
+                                        tokenDeathTime: user.tokenDeathTime
+                                    });
+                            })
+                                .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCard/CardsPack.findByIdAndUpdate'));
+                        })
+                            .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCard/Card.count'));
+                    }
                 })
                     .catch(e => findUserByToken_1.status500(res, e, user, 'deleteCard/Card.findByIdAndDelete'));
         })
