@@ -51,12 +51,27 @@ exports.addCard = (req, res, user) => __awaiter(void 0, void 0, void 0, function
                         type: typeF,
                         rating: 0
                     })
-                        .then((newCard) => res.status(201).json({
-                        newCard,
-                        success: true,
-                        token: user.token,
-                        tokenDeathTime: user.tokenDeathTime
-                    }))
+                        .then((newCard) => {
+                        card_1.default.count({ cardsPack_id: cardsPack_idF })
+                            .exec()
+                            .then(cardsTotalCount => {
+                            cardsPack_1.default.findByIdAndUpdate(cardsPack_idF, { cardsCount: cardsTotalCount }, { new: true })
+                                .exec()
+                                .then((updatedCardsPack) => {
+                                if (!updatedCardsPack)
+                                    findUserByToken_1.status400(res, `never`, user, 'addCard');
+                                else
+                                    res.status(201).json({
+                                        newCard,
+                                        success: true,
+                                        token: user.token,
+                                        tokenDeathTime: user.tokenDeathTime
+                                    });
+                            })
+                                .catch(e => findUserByToken_1.status500(res, e, user, 'addCard/CardsPack.findByIdAndUpdate'));
+                        })
+                            .catch(e => findUserByToken_1.status500(res, e, user, 'addCard/Card.count'));
+                    })
                         .catch(e => findUserByToken_1.status500(res, e, user, 'addCard/Card.create'));
             }
         })

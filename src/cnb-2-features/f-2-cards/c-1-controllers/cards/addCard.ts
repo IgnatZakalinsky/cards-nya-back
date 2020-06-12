@@ -44,13 +44,32 @@ export const addCard = async (req: Request, res: Response, user: IUser) => {
                     type: typeF,
                     rating: 0
                 })
-                    .then((newCard: ICard) => res.status(201).json({
-                        newCard,
-                        success: true,
-                        token: user.token,
-                        tokenDeathTime: user.tokenDeathTime
-                    }))
+                    .then((newCard: ICard) => {
 
+                        Card.count({cardsPack_id: cardsPack_idF})
+                            .exec()
+                            .then(cardsTotalCount => {
+
+                                CardsPack.findByIdAndUpdate(
+                                    cardsPack_idF,
+                                    {cardsCount: cardsTotalCount},
+                                    {new: true}
+                                )
+                                    .exec()
+                                    .then((updatedCardsPack: ICardsPack | null) => {
+                                        if (!updatedCardsPack) status400(res, `never`, user, 'addCard');
+
+                                        else res.status(201).json({
+                                            newCard,
+                                            success: true,
+                                            token: user.token,
+                                            tokenDeathTime: user.tokenDeathTime
+                                        })
+                                    })
+                                    .catch(e => status500(res, e, user, 'addCard/CardsPack.findByIdAndUpdate'))
+                            })
+                            .catch(e => status500(res, e, user, 'addCard/Card.count'));
+                    })
                     .catch(e => status500(res, e, user, 'addCard/Card.create'));
             }
         })
