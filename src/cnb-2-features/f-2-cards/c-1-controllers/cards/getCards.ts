@@ -3,6 +3,7 @@ import {IUser} from "../../../f-1-auth/a-2-models/user";
 import {status400, status500} from "../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken";
 import Card, {ICard} from "../../c-2-models/card";
 import CardsPack, {ICardsPack} from "../../c-2-models/cardsPack";
+import Grade from "../../c-2-models/grade";
 
 export const getCards = async (req: Request, res: Response, user: IUser) => {
     const {page, pageCount, sortCards, cardAnswer, cardQuestion, min, max, cardsPack_id} = req.query;
@@ -71,14 +72,27 @@ export const getCards = async (req: Request, res: Response, user: IUser) => {
                                         .then(cardsTotalCount => {
                                             if (pageCountF * (pageF - 1) > cardsTotalCount) pageF = 1;
 
-                                            res.status(200)
-                                                .json({
-                                                    cards,
-                                                    page: pageF, pageCount: pageCountF, cardsTotalCount,
-                                                    minGrade: minF, maxGrade: maxF,
-                                                    token: user.token,
-                                                    tokenDeathTime: user.tokenDeathTime,
+                                            Grade.find({cardsPack_id: cardsPack_idF, user_id: user._id})
+                                                .lean()
+                                                .exec()
+                                                .then(grades => {
+
+                                                    const cardsF = cards.map(c => {
+                                                        const grade = grades.find(g => g.card_id.equals(c._id));
+                                                        if (!grade) return c;
+                                                        else return {...c, grade: grade.grade, shots: grade.shots}
+                                                    });
+
+                                                    res.status(200)
+                                                        .json({
+                                                            cards: cardsF,
+                                                            page: pageF, pageCount: pageCountF, cardsTotalCount,
+                                                            minGrade: minF, maxGrade: maxF,
+                                                            token: user.token,
+                                                            tokenDeathTime: user.tokenDeathTime,
+                                                        })
                                                 })
+                                                .catch(e => status500(res, e, user, 'getCards/Grade.find'));
                                         })
                                         .catch(e => status500(res, e, user, 'getCards/Card.count'));
                                 })

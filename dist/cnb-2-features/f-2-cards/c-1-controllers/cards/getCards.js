@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const findUserByToken_1 = require("../../../f-1-auth/a-3-helpers/h-2-users/findUserByToken");
 const card_1 = __importDefault(require("../../c-2-models/card"));
 const cardsPack_1 = __importDefault(require("../../c-2-models/cardsPack"));
+const grade_1 = __importDefault(require("../../c-2-models/grade"));
 exports.getCards = (req, res, user) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, pageCount, sortCards, cardAnswer, cardQuestion, min, max, cardsPack_id } = req.query;
     let pageF = +page || 1;
@@ -72,14 +73,27 @@ exports.getCards = (req, res, user) => __awaiter(void 0, void 0, void 0, functio
                             .then(cardsTotalCount => {
                             if (pageCountF * (pageF - 1) > cardsTotalCount)
                                 pageF = 1;
-                            res.status(200)
-                                .json({
-                                cards,
-                                page: pageF, pageCount: pageCountF, cardsTotalCount,
-                                minGrade: minF, maxGrade: maxF,
-                                token: user.token,
-                                tokenDeathTime: user.tokenDeathTime,
-                            });
+                            grade_1.default.find({ cardsPack_id: cardsPack_idF, user_id: user._id })
+                                .lean()
+                                .exec()
+                                .then(grades => {
+                                const cardsF = cards.map(c => {
+                                    const grade = grades.find(g => g.card_id.equals(c._id));
+                                    if (!grade)
+                                        return c;
+                                    else
+                                        return Object.assign(Object.assign({}, c), { grade: grade.grade, shots: grade.shots });
+                                });
+                                res.status(200)
+                                    .json({
+                                    cards: cardsF,
+                                    page: pageF, pageCount: pageCountF, cardsTotalCount,
+                                    minGrade: minF, maxGrade: maxF,
+                                    token: user.token,
+                                    tokenDeathTime: user.tokenDeathTime,
+                                });
+                            })
+                                .catch(e => findUserByToken_1.status500(res, e, user, 'getCards/Grade.find'));
                         })
                             .catch(e => findUserByToken_1.status500(res, e, user, 'getCards/Card.count'));
                     })
