@@ -44,8 +44,7 @@ exports.updateGrade = (req, res, user) => __awaiter(void 0, void 0, void 0, func
                             })
                                 .then((newGrade) => {
                                 res.status(201).json({
-                                    newGrade,
-                                    success: true,
+                                    updatedGrade: newGrade,
                                     token: user.token,
                                     tokenDeathTime: user.tokenDeathTime
                                 });
@@ -66,7 +65,6 @@ exports.updateGrade = (req, res, user) => __awaiter(void 0, void 0, void 0, func
                                 else
                                     res.status(200).json({
                                         updatedGrade,
-                                        success: true,
                                         token: user.token,
                                         tokenDeathTime: user.tokenDeathTime
                                     });

@@ -35,8 +35,7 @@ export const updateGrade = async (req: Request, res: Response, user: IUser) => {
                                 })
                                     .then((newGrade: IGrade) => {
                                         res.status(201).json({
-                                            newGrade,
-                                            success: true,
+                                            updatedGrade: newGrade,
                                             token: user.token,
                                             tokenDeathTime: user.tokenDeathTime
                                         })
@@ -58,7 +57,6 @@ export const updateGrade = async (req: Request, res: Response, user: IUser) => {
 
                                         else res.status(200).json({
                                             updatedGrade,
-                                            success: true,
                                             token: user.token,
                                             tokenDeathTime: user.tokenDeathTime
                                         })
