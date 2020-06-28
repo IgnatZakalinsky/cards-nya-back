@@ -48,19 +48,23 @@ export const findUserByToken = (f: (req: Request, res: Response, user: IUser) =>
     };
 
 export const status500 = (res: Response, e: any, user: IUser, inTry: string) => {
-    res.status(500).json({
+    const error = {
         error: 'some error: ' + e.message,
         errorObject: DEV_VERSION && {...e},
         in: inTry,
         token: user.token,
         tokenDeathTime: user.tokenDeathTime,
-    })
+    };
+    console.log('error-nya-500:', error);
+    res.status(500).json(error)
 };
 export const status400 = (res: Response, e: string, user: IUser, inTry: string) => {
-    res.status(400).json({
+    const error = {
         error: e,
         in: inTry,
         token: user.token,
         tokenDeathTime: user.tokenDeathTime,
-    })
+    };
+    console.log('error-nya-400:', error);
+    res.status(400).json(error)
 };

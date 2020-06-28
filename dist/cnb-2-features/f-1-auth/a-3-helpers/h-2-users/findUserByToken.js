@@ -50,20 +50,24 @@ exports.findUserByToken = (f, inTry, query) => (req, res) => __awaiter(void 0, v
     }
 });
 exports.status500 = (res, e, user, inTry) => {
-    res.status(500).json({
+    const error = {
         error: 'some error: ' + e.message,
         errorObject: config_1.DEV_VERSION && Object.assign({}, e),
         in: inTry,
         token: user.token,
         tokenDeathTime: user.tokenDeathTime,
-    });
+    };
+    console.log('error-nya-500:', error);
+    res.status(500).json(error);
 };
 exports.status400 = (res, e, user, inTry) => {
-    res.status(400).json({
+    const error = {
         error: e,
         in: inTry,
         token: user.token,
         tokenDeathTime: user.tokenDeathTime,
-    });
+    };
+    console.log('error-nya-400:', error);
+    res.status(400).json(error);
 };
 //# sourceMappingURL=findUserByToken.js.map
